@@ -1,0 +1,146 @@
+﻿@{
+    Layout = "~/Views/Shared/_PlanITLayout.cshtml";
+}
+
+
+<style>
+    :root {
+        --bg-dark: #0f111a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Keep Navbar identical */
+    nav {
+        background: rgba(15, 17, 26, 0.8) !important;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: none;
+    }
+
+    /* Table Container Styling */
+    .user-container {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 30px;
+        margin-top: 30px;
+    }
+
+    table.modern-table {
+        border: none;
+        color: var(--text-main);
+    }
+
+        table.modern-table thead {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table.modern-table th {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            padding: 15px;
+        }
+
+        table.modern-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+    /* Role Badges */
+    .badge-admin {
+        background: var(--accent-gradient);
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .badge-user {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .search-bar {
+        background: rgba(255,255,255,0.05) !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 12px !important;
+        color: white !important;
+        padding: 0 15px !important;
+        height: 45px !important;
+    }
+</style>
+
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo" style="margin-left:30px; font-weight: 800; letter-spacing: -1px;">PLAN<span style="color:#6366f1">IT</span></a>
+        <ul class="right hide-on-med-and-down" style="margin-right:30px;">
+            <li><a href="#" ng-click="RedirectingPage(404)">Dashboard</a></li>
+            <li><a href="#">Events</a></li>
+            <li class="active"><a href="#" style="color:#6366f1">Users</a></li>
+            <li><a href="#" class="btn-flat" style="color: #ff4757; border: 1px solid #ff4757; border-radius: 10px; line-height: 36px; margin-left: 15px;" ng-click="RedirectingPage(101)">Log Out</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container" style="width: 90%; max-width: 1400px; margin-top: 50px;" ng-init="getAllUsers()">
+
+    <div class="row valign-wrapper">
+        <div class="col s6">
+            <h4 style="font-weight: 800; margin: 0;">User Management</h4>
+            <p style="color: var(--text-muted);">View and manage all registered accounts on the platform.</p>
+        </div>
+        <div class="col s6 right-align">
+            <input type="text" class="search-bar" placeholder="Search users..." ng-model="searchUser" style="width: 250px;">
+        </div>
+    </div>
+
+    <div class="user-container">
+        <table class="modern-table responsive-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email Address</th>
+                    <th>Role</th>
+                    <th>Joined Date</th>
+                    <th class="center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="u in allUsers | filter:searchUser">
+                    <td>{{u.UserID}}</td>
+                    <td style="font-weight: 600;">{{u.FirstName}} {{u.LastName}}</td>
+                    <td>{{u.Email}}</td>
+                    <td>
+                        <span ng-class="u.RoleID == 1 ? 'badge-admin' : 'badge-user'">
+                            {{u.RoleID == 1 ? 'Admin' : 'User'}}
+                        </span>
+                    </td>
+                    <td style="color: var(--text-muted);">{{u.CreatedAt | date:'MMM d, yyyy'}}</td>
+                    <td class="center">
+                        <a href="#!" style="color: #6366f1; margin-right: 15px;"><i class="material-icons">edit</i></a>
+                        <a href="#!" style="color: #ff4757;" ng-click="deleteUser(u.UserID)"><i class="material-icons">delete</i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div ng-if="allUsers.length == 0" class="center-align" style="padding: 40px;">
+            <p style="color: var(--text-muted);">No users found in the database.</p>
+        </div>
+    </div>
+</div>

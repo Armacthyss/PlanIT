@@ -1,0 +1,103 @@
+﻿@{
+    Layout = "~/Views/Shared/_PlanITLayout.cshtml";
+}
+
+<style>
+    :root {
+        --bg-dark: #0f111a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --danger: #ff4757;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    nav {
+        background: rgba(15, 17, 26, 0.8) !important;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: none;
+    }
+
+    .delete-container {
+        background: var(--card-bg);
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        margin-top: 50px;
+    }
+
+    .custom-table th {
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        padding: 20px;
+    }
+
+    .btn-delete {
+        background: rgba(255, 71, 87, 0.1) !important;
+        color: var(--danger) !important;
+        border: 1px solid var(--danger);
+        border-radius: 8px;
+        font-weight: 700;
+        box-shadow: none;
+        text-transform: none;
+    }
+
+        .btn-delete:hover {
+            background: var(--danger) !important;
+            color: white !important;
+        }
+</style>
+
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo" style="margin-left:30px; font-weight: 800;">PLAN<span style="color:#6366f1">IT</span></a>
+        <ul class="right hide-on-med-and-down" style="margin-right:30px;">
+            <li><a href="#" ng-click="RedirectingPage(404)">Dashboard</a></li>
+            <li class="active"><a href="#" style="color:#ff4757">Remove Events</a></li>
+            <li><a href="#" ng-click="RedirectingPage(808)">Users</a></li>
+            <li><a href="#" class="btn-flat" style="color: #ff4757; border: 1px solid #ff4757; border-radius: 10px; line-height: 36px; margin-left: 15px;" ng-click="RedirectingPage(101)">Log Out</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container" ng-init="loadEvents()">
+    <div class="row">
+        <div class="col s12">
+            <div class="delete-container">
+                <h4 style="font-weight: 800; margin-bottom: 5px;">Delete <span style="color: var(--danger);">Events</span></h4>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">Warning: Deleting an event is permanent and cannot be undone.</p>
+
+                <table class="highlight centered custom-table">
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="event in events">
+                            <td style="font-weight: 600;">{{event.Title}}</td>
+                            <td>{{event.EventDate | date:'MMM d, yyyy'}}</td>
+                            <td>{{event.Location}}</td>
+                            <td>
+                                <button class="btn btn-delete waves-effect waves-light" ng-click="deleteEvent(event.EventID)">
+                                    Remove Event
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

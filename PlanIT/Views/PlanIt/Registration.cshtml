@@ -1,0 +1,71 @@
+﻿@{
+    Layout = "~/Views/Shared/_PlanITLayout.cshtml";
+}
+
+
+    <div class="row" style="height:100vh; margin:0px;">
+
+        <!-- LEFT SIDE -->
+        <div class="col s6"
+             style="height:100%; display:flex; flex-direction:column;">
+
+            <!-- CENTER FORM -->
+            <div style="flex:1; display:flex; justify-content:center; align-items:center;">
+
+                <form style="width:80%; max-width:350px;">
+
+                    <h3><b>Create Account</b></h3>
+
+                    <div class="input-field col s6">
+                        <input id="Fname" type="text" ng-model="rFirstName" ng-pattern="/^[a-zA-Z\s]+$/"  maxlength="20">
+                        <label for="Fname">First Name</label>
+                    </div>
+
+                    <div class="input-field col s6">
+                        <input id="Lname" type="text" ng-model="rLastName" ng-pattern="/^[a-zA-Z\s]+$/"  maxlength="20">
+                        <label for="Lname">Last Name</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <input id="Email" type="email" ng-model="rEmail">
+                        <label for="Email">Email</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <input id="Password" type="password" ng-model="rPassword"  maxlength="20">
+                        <label for="Password">Password</label>
+                    </div>
+
+                    <a class="waves-effect waves-light btn col s12"
+                       ng-click="addUser()"
+                       style="margin:10px;">
+                        Sign-up
+                    </a>
+                   
+                    <p>
+                        Already have account?
+                        <a ng-click="RedirectingPage(101)">Sign in</a>
+                    </p>
+
+                </form>
+
+            </div>
+
+            <!-- FOOTER (BOTTOM OF LEFT COLUMN) -->
+            <div class="center-align grey-text text-darken-1"
+                 style="padding:15px;">
+                © 2026 PlanIT. All rights reserved.
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE IMAGE -->
+        <div class="col s6 m6 l6"
+             style="height:100%;
+             background-image:url('https://images.unsplash.com/photo-1578385215219-086ac81983c2?q=80&w=2071');
+             background-size:cover;
+             background-position:center;">
+        </div>
+
+    </div>
+

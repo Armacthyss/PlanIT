@@ -1,0 +1,374 @@
+﻿@{
+    Layout = "~/Views/Shared/_PlanITLayout.cshtml";
+}
+
+<style>
+    :root {
+        --bg-dark: #0f111a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    nav {
+        background: rgba(15, 17, 26, 0.8) !important;
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: none;
+    }
+
+    .dashboard-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 24px;
+        height: auto;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .dashboard-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #6366f1;
+            transform: translateY(-8px);
+        }
+
+    .stat-value {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-top: 10px;
+        display: block;
+        background: var(--accent-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .stat-label {
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .action-card {
+        background: var(--card-bg);
+        border-radius: 24px;
+        padding: 30px;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+        .action-card:hover {
+            background: var(--accent-gradient);
+        }
+
+            .action-card:hover i,
+            .action-card:hover h6,
+            .action-card:hover p {
+                color: white !important;
+            }
+
+    .icon-box {
+        width: 50px;
+        height: 50px;
+        background: rgba(99, 102, 241, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        color: #6366f1;
+    }
+
+    .hero-banner {
+        position: relative;
+        height: 300px;
+        border-radius: 30px;
+        background-image: linear-gradient(to bottom, rgba(15,17,26,0.2), rgba(15,17,26,0.9)), url('https://images.unsplash.com/photo-1501281668745-f7f57925c3b4');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: flex-end;
+        padding: 40px;
+    }
+
+    /* ── Chart cards ── */
+    .chart-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 24px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+        .chart-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #6366f1;
+        }
+
+    .chart-label {
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .chart-title {
+        color: var(--text-main);
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0 0 16px 0;
+    }
+
+    .chart-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 12px;
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+        .chart-legend span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        display: inline-block;
+    }
+</style>
+
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo" style="margin-left:30px; font-weight: 800; letter-spacing: -1px;">PLAN<span style="color:#6366f1">IT</span></a>
+        <ul class="right hide-on-med-and-down" style="margin-right:30px;">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Events</a></li>
+            <li><a ng-click="RedirectingPage(808)">Users</a></li>
+            <li><a href="#" class="btn-flat" style="color: #ff4757; border: 1px solid #ff4757; border-radius: 10px; line-height: 36px; margin-left: 15px;" ng-click="RedirectingPage(101)">Log Out</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container" style="width: 90%; max-width: 1400px; margin-top: 40px;">
+
+    <div class="hero-banner">
+        <div>
+            <h2 style="margin:0; font-weight: 800;">Welcome back, Admin</h2>
+            <p style="color: #cbd5e1; font-size: 1.1rem;">Here is what's happening with your platform today.</p>
+        </div>
+    </div>
+
+    <!-- Platform Insights -->
+    <h5 style="margin: 50px 0 25px 0; font-weight: 700; color: var(--text-muted);">Platform Insights</h5>
+    <div class="row">
+        <div class="col s12 m3">
+            <div class="dashboard-card">
+                <span class="stat-label">Total Events</span>
+                <span class="stat-value">0</span>
+            </div>
+        </div>
+        <div class="col s12 m3">
+            <div class="dashboard-card">
+                <span class="stat-label">Active Users</span>
+                <span class="stat-value">0</span>
+            </div>
+        </div>
+        <div class="col s12 m3">
+            <div class="dashboard-card">
+                <span class="stat-label">Ticket Revenue</span>
+                <span class="stat-value">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── ANALYTICS CHARTS ── -->
+    <h5 style="margin: 50px 0 25px 0; font-weight: 700; color: var(--text-muted);">Analytics</h5>
+
+    <!-- Chart 1: Events per Month (full width) -->
+    <div class="row">
+        <div class="col s12">
+            <div class="chart-card">
+                <p class="chart-label">Monthly Overview</p>
+                <p class="chart-title">Events booked per month</p>
+                <div class="chart-legend">
+                    <span><span class="legend-dot" style="background:#6366f1;"></span>Events booked</span>
+                </div>
+                <div style="position: relative; width: 100%; height: 260px;">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart 2 & 3: Side by side -->
+    <div class="row">
+        <div class="col s12 m6">
+            <div class="chart-card">
+                <p class="chart-label">Breakdown</p>
+                <p class="chart-title">Events by category</p>
+                <div class="chart-legend">
+                    <span><span class="legend-dot" style="background:#6366f1; border-radius:50%;"></span>Concerts 30%</span>
+                    <span><span class="legend-dot" style="background:#1d9e75; border-radius:50%;"></span>Conferences 25%</span>
+                    <span><span class="legend-dot" style="background:#ef9f27; border-radius:50%;"></span>Sports 20%</span>
+                    <span><span class="legend-dot" style="background:#d4537e; border-radius:50%;"></span>Social 15%</span>
+                    <span><span class="legend-dot" style="background:#94a3b8; border-radius:50%;"></span>Other 10%</span>
+                </div>
+                <div style="position: relative; width: 100%; height: 260px;">
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m6">
+            <div class="chart-card">
+                <p class="chart-label">Revenue Trend</p>
+                <p class="chart-title">Ticket revenue over time</p>
+                <div class="chart-legend">
+                    <span><span class="legend-dot" style="background:#1d9e75;"></span>Revenue ($)</span>
+                </div>
+                <div style="position: relative; width: 100%; height: 260px;">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Management -->
+    <h5 style="margin: 50px 0 25px 0; font-weight: 700; color: var(--text-muted);">Quick Management</h5>
+    <div class="row">
+        <div class="col s12 m4">
+            <div class="action-card" ng-click="RedirectingPage(505)">
+                <div class="icon-box"><i class="material-icons">add_circle_outline</i></div>
+                <h6 style="font-weight: 700;">Create Event</h6>
+                <p style="color: var(--text-muted);">Launch a new experience and reach your audience.</p>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="action-card" ng-click="RedirectingPage(707)">
+                <div class="icon-box"><i class="material-icons">auto_fix_high</i></div>
+                <h6 style="font-weight: 700;">Edit Catalog</h6>
+                <p style="color: var(--text-muted);">Update details, pricing, or schedules for events.</p>
+            </div>
+        </div>
+        <div class="col s12 m4">
+            <div class="action-card" ng-click="RedirectingPage(606)">
+                <div class="icon-box" style="color: #ff4757; background: rgba(255,71,87,0.1);"><i class="material-icons">delete_sweep</i></div>
+                <h6 style="font-weight: 700;">Cleanup System</h6>
+                <p style="color: var(--text-muted);">Archive or remove expired events from the database.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+
+    // Chart 1 — Bar: Events per month
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Events booked',
+                data: [4, 7, 5, 9, 12, 8], // 🔁 replace with real data from your controller
+                backgroundColor: '#6366f1',
+                borderRadius: 8,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#94a3b8' }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: '#94a3b8', stepSize: 3 },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                }
+            }
+        }
+    });
+
+    // Chart 2 — Doughnut: Events by category
+    new Chart(document.getElementById('doughnutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Concerts', 'Conferences', 'Sports', 'Social', 'Other'],
+            datasets: [{
+                data: [30, 25, 20, 15, 10], // 🔁 replace with real data
+                backgroundColor: ['#6366f1', '#1d9e75', '#ef9f27', '#d4537e', '#94a3b8'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Chart 3 — Line: Ticket revenue
+    new Chart(document.getElementById('lineChart'), {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Revenue',
+                data: [1200, 1900, 1500, 2800, 3500, 2900], // 🔁 replace with real data
+                borderColor: '#1d9e75',
+                backgroundColor: 'rgba(29,158,117,0.1)',
+                borderWidth: 2,
+                pointBackgroundColor: '#1d9e75',
+                pointRadius: 4,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#94a3b8' }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#94a3b8',
+                        callback: function (v) { return '$' + v.toLocaleString(); }
+                    },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                }
+            }
+        }
+    });
+</script>

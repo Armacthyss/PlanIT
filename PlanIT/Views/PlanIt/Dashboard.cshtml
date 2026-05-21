@@ -1,0 +1,116 @@
+﻿@{
+    Layout = "~/Views/Shared/_PlanITLayout.cshtml";
+}
+
+<style>
+    :root {
+        --bg-dark: #0f111a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    nav {
+        background: rgba(15, 17, 26, 0.8) !important;
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .event-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        margin-bottom: 30px;
+    }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            border-color: #6366f1;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+    .hero-display {
+        height: 350px;
+        border-radius: 40px;
+        background: linear-gradient(to bottom, rgba(15,17,26,0.1), rgba(15,17,26,0.95)), url('https://www.tacomadome.org/assets/img/WEB-TACOMA-2025-Ado-2000x750-593e559cad.jpg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: flex-end;
+        padding: 50px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .ticket-row {
+        background: rgba(255,255,255,0.03);
+        border: 1px dashed rgba(255,255,255,0.2);
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div ng-controller="PlanITController" ng-init="loadDashboardData()">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo" style="margin-left:30px; font-weight: 800;">PLAN<span style="color:#6366f1">IT</span></a>
+            <ul class="right hide-on-med-and-down" style="margin-right:30px;">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a ng-click="scrollTo('my-tickets')">My Tickets</a></li>
+                <li><a href="#" class="red-text" ng-click="RedirectingPage(101)">Log Out</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="width: 95%; max-width: 1400px; margin-top: 40px;">
+
+        <div class="hero-display">
+            <div>
+                <span style="background: #6366f1; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">LIVE NOW</span>
+                <h2 style="margin:10px 0 0 0; font-weight: 900; letter-spacing: -2px;">Your Next Adventure Awaits</h2>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 60px;">
+            <div class="col s12">
+                <h4 style="font-weight: 800;">Available <span style="color: #6366f1;">Events</span></h4>
+            </div>
+
+            <div class="col s12 m6 l3" ng-repeat="event in events">
+                <div class="event-card">
+                    <div style="height: 160px; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center;">
+                        <i class="material-icons large white-text" style="opacity: 0.3;">event</i>
+                    </div>
+                    <div style="padding: 20px;">
+                        <h6 style="font-weight: 700;">{{event.Title}}</h6>
+                        <p class="grey-text" style="font-size: 0.9rem;">
+                            <i class="material-icons tiny">place</i> {{event.Location}}<br />
+                            <i class="material-icons tiny">calendar_today</i> {{event.EventDate | date:'mediumDate'}}
+                        </p>
+                        <p style="color: #6366f1; font-weight: 800;">{{event.TotalTickets}} Seats Left</p>
+
+                        <button class="btn waves-effect waves-light"
+                                style="width: 100%; border-radius: 12px; background: var(--accent-gradient); text-transform: none; font-weight: 700;"
+                                ng-click="viewEventDetails(event)">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+       
+    </div>
+</div>

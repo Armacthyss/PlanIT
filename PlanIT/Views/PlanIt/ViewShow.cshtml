@@ -1,0 +1,200 @@
+﻿@{
+    Layout = "~/Views/Shared/_PlanITLayout.cshtml";
+}
+
+<style>
+    :root {
+        --bg-dark: #0f111a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+    }
+
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+    }
+
+    nav {
+        background: rgba(15, 17, 26, 0.8) !important;
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .qty-btn {
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+        .qty-btn:hover {
+            background: #6366f1;
+        }
+
+        .qty-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: rgba(255,255,255,0.05);
+        }
+
+    .receipt-box {
+        background: white;
+        color: #1e293b;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        margin-top: 40px;
+    }
+</style>
+
+<div ng-controller="PlanITController" ng-init="initCheckoutPage()">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/PlanIT/Dashboard" class="brand-logo" style="margin-left:30px; font-weight: 800;">PLAN<span style="color:#6366f1">IT</span></a>
+            <ul class="right hide-on-med-and-down" style="margin-right:30px;">
+                <li><a href="/PlanIT/Dashboard">Dashboard</a></li>
+                <li><a href="#" class="red-text" ng-click="RedirectingPage(101)">Sign Out</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="width: 95%; max-width: 1300px; margin-top: 40px; padding-bottom: 100px;">
+
+        <div class="row" ng-if="!transactionComplete">
+            <div class="col s12 l8">
+                <div style="border-radius: 32px; overflow: hidden; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.1);">
+                    <img src="https://www.tacomadome.org/assets/img/WEB-TACOMA-2025-Ado-2000x750-593e559cad.jpg" style="width: 100%; display: block;" alt="Event Banner" />
+                </div>
+
+                <h1 style="font-weight: 900; font-size: 3.5rem; margin: 0 0 20px 0; letter-spacing: -1px;">{{eventDetail.Title || "Ado's \"Hibana\" World Tour"}}</h1>
+
+                <div style="display: flex; gap: 30px; margin-bottom: 40px;" class="grey-text">
+                    <span><i class="material-icons tiny" style="color: #6366f1;">calendar_today</i> May 8, 2026</span>
+                    <span><i class="material-icons tiny" style="color: #6366f1;">place</i> {{eventDetail.Location || 'SM Mall of Asia Arena'}}</span>
+                </div>
+
+                <h5 style="font-weight: 700; margin-bottom: 15px;">About Event</h5>
+                <p style="color: var(--text-muted); line-height: 1.8; font-size: 1.1rem; margin-bottom: 40px;">
+                    {{eventDetail.Description || 'Japanese music sensation Ado will perform in Manila for the very first time as part of her much-anticipated "Hibana" World Tour. The concert will take place at the SM Mall of Asia Arena, one of the Philippines\' largest and most iconic venues.'}}
+                </p>
+            </div>
+
+            <div class="col s12 l4">
+                <div style="background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px;">
+                    <h5 style="font-weight: 800; margin-top: 0; margin-bottom: 5px;">Ticket Summary</h5>
+                    <p class="grey-text" style="font-size: 0.9rem; margin-bottom: 25px;">Secure your spot before they sell out.</p>
+
+                    <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                        <i class="material-icons" style="margin-right: 15px; color: #a855f7;">confirmation_number</i>
+                        <div>
+                            <h6 style="margin: 0; font-weight: 700;" ng-class="{'red-text': eventDetail.TotalTickets <= 0, 'green-text': eventDetail.TotalTickets > 0}">
+                                {{eventDetail.TotalTickets > 0 ? eventDetail.TotalTickets + ' Slots Left' : 'Fully Booked'}}
+                            </h6>
+                            <span class="grey-text" style="font-size: 0.8rem;">Current Availability</span>
+                        </div>
+                    </div>
+
+                    <div ng-if="eventDetail.TotalTickets > 0" style="margin-bottom: 30px;">
+                        <label class="grey-text" style="font-size: 0.85rem; font-weight: 600;">Select Ticket Quantity</label>
+                        <div style="display: flex; align-items: center; margin-top: 10px; background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 12px; width: 150px; border: 1px solid rgba(255,255,255,0.1);">
+                            <button class="qty-btn" ng-click="changeQty(-1)" ng-disabled="bookingQty <= 1">-</button>
+                            <span style="flex-grow: 1; text-align: center; font-weight: 700; font-size: 1.2rem;">{{bookingQty}}</span>
+                            <button class="qty-btn" ng-click="changeQty(1)" ng-disabled="bookingQty >= eventDetail.TotalTickets">+</button>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 20px; margin-bottom: 30px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <span class="grey-text">Unit Price</span>
+                            <span style="font-weight: 700;">{{eventDetail.Price > 0 ? (eventDetail.Price | currency: '₱') : '₱4,500.00'}}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <span class="grey-text">Quantity Selected</span>
+                            <span style="font-weight: 700;" class="grey-text">x{{bookingQty}}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 15px;">
+                            <span style="font-weight: 700; font-size: 1.1rem;">Grand Total</span>
+                            <span style="color: #6366f1; font-weight: 900; font-size: 1.4rem;">{{getGrandTotal() | currency: '₱'}}</span>
+                        </div>
+                    </div>
+
+                    <button class="btn waves-effect waves-light"
+                            style="width: 100%; height: 50px; border-radius: 12px; font-weight: 800; text-transform: none; font-size: 1.1rem;"
+                            ng-style="{'background': eventDetail.TotalTickets > 0 ? 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)' : '#334155'}"
+                            ng-click="submitReservation()"
+                            ng-disabled="eventDetail.TotalTickets <= 0">
+                        {{eventDetail.TotalTickets > 0 ? 'Confirm Reservation' : 'Sold Out'}}
+                    </button>
+
+                    <p class="grey-text center-align" style="font-size: 0.75rem; margin-top: 15px; margin-bottom: 0;" ng-if="eventDetail.TotalTickets <= 0">
+                        Check back later if slots are added.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="transactionComplete">
+            <div class="col s12 m8 offset-m2 l6 offset-l3">
+
+                <div class="center-align" style="margin-bottom: 30px;">
+                    <i class="material-icons large green-text">check_circle</i>
+                    <h4 style="font-weight: 800; margin: 10px 0 0 0;">Booking Successful!</h4>
+                    <p class="grey-text">Your order has been recorded. Here is your system receipt:</p>
+                </div>
+
+                <div class="receipt-box">
+                    <div class="center-align" style="border-bottom: 2px dashed #cbd5e1; padding-bottom: 20px; margin-bottom: 20px;">
+                        <h4 style="font-weight: 900; letter-spacing: -1px; margin: 0; color: #0f111a;">PLAN<span style="color:#6366f1">IT</span> RECEIPT</h4>
+                        <p style="color: #64748b; font-size: 0.85rem; margin: 5px 0 0 0;">Transaction Ref: #PLN-{{generatedRefId}}</p>
+                    </div>
+
+                    <table style="width: 100%; color: #334155; font-size: 1rem; margin-bottom: 20px;">
+                        <tr>
+                            <td style="padding: 8px 0; font-weight: 600; color: #64748b;">Event:</td>
+                            <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #0f111a;">{{eventDetail.Title || "Ado's \"Hibana\" World Tour"}}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; font-weight: 600; color: #64748b;">Venue:</td>
+                            <td style="padding: 8px 0; text-align: right;">{{eventDetail.Location || 'SM Mall of Asia Arena'}}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; font-weight: 600; color: #64748b;">Ticket Price:</td>
+                            <td style="padding: 8px 0; text-align: right;">{{eventDetail.Price > 0 ? (eventDetail.Price | currency: '₱') : '₱4,500.00'}}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; font-weight: 600; color: #64748b;">Quantity Purchased:</td>
+                            <td style="padding: 8px 0; text-align: right; font-weight: 700;">{{bookingQty}}</td>
+                        </tr>
+                        <tr style="border-top: 1px solid #e2e8f0;">
+                            <td style="padding: 15px 0 5px 0; font-weight: 800; font-size: 1.2rem; color: #0f111a;">Amount Paid:</td>
+                            <td style="padding: 15px 0 5px 0; text-align: right; font-weight: 900; font-size: 1.3rem; color: #6366f1;">{{getGrandTotal() | currency: '₱'}}</td>
+                        </tr>
+                    </table>
+
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 0.85rem; color: #64748b; margin-bottom: 20px;" class="center-align">
+                        Thank you for booking with PLANIT! Keep this confirmation for entry.
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; gap: 20px;">
+                    <a href="/PlanIT/Dashboard" class="btn-flat white-text" style="flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; font-weight: 700; height: 48px; line-height: 48px; text-transform: none;">
+                        Back to Home
+                    </a>
+                    <button class="btn waves-effect waves-light" style="flex: 1; background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); border-radius: 12px; font-weight: 700; height: 48px; text-transform: none;" ng-click="printPDF()">
+                        <i class="material-icons left">picture_as_pdf</i> Export PDF Receipt
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
